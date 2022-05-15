@@ -55,7 +55,7 @@
             } else if (eleccion === "D") {
               parrafo.textContent = "tabla campo1 y campo2.";
               div.innerHTML =
-                '<form action="conjuntas.php" method="post"><fieldset><legend> Ingrese datos solicitados</legend><p><label>tabla:<input type="text" name="tabla" /></label> </p><p><label>campo1: <input type="text" name="campo1" /></label></p><p><label>campo2: <input type="texto" name="campo2" /></label></p><p><input type="submit" value="enviar"/></p></fieldset></form>';
+                '<form action="conjuntas.php" method="post"><fieldset><legend> Ingrese datos solicitados</legend><p><label>tabla:<input type="text" name="tabla" /></label> <p><label>Nombre Vista:<input type="text" name="Vista" /></label> </p><p><label>campo1: <input type="text" name="campo1" /></label></p><p><label>campo2: <input type="texto" name="campo2" /></label></p><p><input type="submit" value="enviar"/></p></fieldset></form>';
               div.innerHTML;
             } else if (eleccion === "E") {
               parrafo.textContent =

@@ -13,13 +13,30 @@ $conexion = mysqli_connect($hostname_localhost, $username_localhost, $password_l
 $consulta = "";
 if ($conexion) {
     $tabla = $_POST["tabla"];
+    $vista_nombre = $_POST["Vista"];
     $campo1 = $_POST["campo1"];
     $campo2 = $_POST["campo2"];
 
-    echo json_encode($_POST);
     if ($tabla && $campo1 && $campo2) {
-        $consulta = "create view conjuntas as select mercado, industria, count(*)/(select count(*) from balances) as Probabilidad from balances where mercado in(select distinct mercado from balances) and industria in(select distinct industria from balances) group by industria, mercado order by mercado, industria;";
+        /*        $consulta_2 = "
+        create view red as select mercado, industria, count(*)/(select count(*) from
+        balances) as Probabilidad from balances where mercado
+        in(select distinct mercado from balances) and industria
+        in(select distinct industria from balances) group by
+        industria, mercado order by mercado, industria;
+        ";*/
+        $consulta = " create view " . $vista_nombre . " as select " . $campo1 . ", " . $campo2 . ", count(*)/(select count(*) from
+        " . $tabla . ") as Probabilidad from " . $tabla . " where " . $campo1 . "
+        in(select distinct " . $campo1 . " from " . $tabla . ") and " . $campo2 . "
+        in(select distinct " . $campo2 . " from " . $tabla . ") group by
+        " . $campo2 . ", " . $campo1 . " order by " . $campo1 . ", " . $campo2 . ";";
+
+        $registro = mysqli_query($conexion, $consulta);
+        if ($registro) {
+            mysqli_close($conexion);
+            echo "Registro almacenado. <br>";
+        } else {
+            echo "error en la ejecución del registro <br>";
+        }
     }
 }
-$conexionA = mysqli_connect($hostname_localhost, $username_localhost, $password_localhost, $database_localhost);
-$resultadoA = mysqli_query($conexionA, $consulta);
