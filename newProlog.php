@@ -24,9 +24,55 @@ include('../conecta/prolog.php');
         <fieldset class="pago">
         <legend class="titulo titulo-lima">Argumentos</legend>
         <label for="programa" class="programa" id="programa">Escribe la base de conocimiento:</label>
-        <textarea name="programa"cols="30" rows="10" class="programa" id="programa">atributo:- read(X), write('\"'), write(X), write('\":'),tipoatributo(X). tipoatributo(M):- read(X), (X='metodo'->metodo(M); b1(X)). b1(X):- X='numero'->numero; b2(X). b2(X):- X='cadena'->cadena;write('error'). cadena:- read(X), write('\"'), write(X), write('\",'). numero:-read(X), write(X). metodo(M):- write('\"function() {'),a2,write(' return '), write(M), write(';}\"'). a2:- read(X), (X='decision'->decision;a3(X)). a3(X):- X='asignacion' -> asignacion;(nl,nl,nl,write('ERROR AL INGRESAR: '),write(X),nl,nl,nl). asignacion:- read(X), write(X), write('='), read(Y), write(Y), write(';'). decision:- write('if('),condicion,write(')'), verdadero. condicion:-read(X), write(X). verdadero:- write('{'),a2,write('}'). falso:- write('{'),a2,write('}'). :- atributo.</textarea>
+        <textarea name="programa"cols="30" rows="10" class="programa" id="programa">
+        objeto :- write('{'),aux1, write('}').
+aux1 :- read(X),(X='atributo'->atributo;
+                 X='fin'->write('')).
+atributo :-read(X),write('\"'),write(X),write('\"'), write(':'),valorobjeto(X),aux2.
+
+valorobjeto(M):-read(Y),(Y='cadena'->cadena;
+                 Y='numero'->numero;
+                 Y='objeto'->objeto;
+                 Y='arreglo'->arreglo;
+                 Y='metodo'->metodo(M);
+                 Y='true'->verdadero;
+                 Y='false'->falso).
+ 
+
+aux2 :- read(X),(X='atributo'->write(','),atributo;
+                 X='fin'->write('')). 
+cadena :- read(X),write('\"'),write(X),write('\"').
+numero :- read(N),write(N).
+arreglo :- write('['),aux3,write(']').
+aux3 :- read(X),(X='valor'->valorarreglo,aux4;
+                 X='fin'->write('didid')).
+aux4 :- read(X),(X='valor'->write(','),valorarreglo,aux4;
+                 X='fin'->write('')). 
+valorarreglo :-read(Y),(Y='cadena'->cadena;
+                 Y='numero'->numero;
+                 Y='objeto'->objeto;
+                 Y='arreglo'->arreglo;
+                 Y='true'->verdadero;
+                 Y='false'->falso).
+verdadero :- write('true').
+falso :- write('false').
+metodo(M) :- write('"function() {'),instruccion, write('return '),write(M),write('}"').
+asignacion :- read(X),write(X),write('='),read(Y),write(Y),write(';').
+aux5 :- read(X),(X='sinosi'->write('else '),decision;
+                 X='sino'->write('else {'),instruccion,write('}');
+                 X='fin'->write('')).
+decision :- write('if ('),read(C),write(C),write(') {'),instruccion,write('}'),aux5.
+instruccion :- read(I),(I='asignacion'->asignacion,instruccion;
+                 I='decision' ->decision,instruccion;
+                 I='fin'->write('')).
+
+:- objeto.
+        
+        </textarea>
         <label for="inputArea">Escibir argumentos:</label>
-        <textarea name="inputArea" id="inputArea" cols="30" rows="10" class="inputArea">a1. metodo. decision. a=b. decision. a=c. asignacion. a. menor.</textarea>
+        <textarea name="inputArea" id="inputArea" cols="30" rows="10" class="inputArea">
+        atributo. empresa. objeto. atributo. nbempresa. cadena. 43. atributo. balance. objeto. atributo. activo. objeto. atributo. infraestructura. numero. 0. atributo. bancos. numero. 0. atributo. insumoA. cadena. Math.random()*100. atributo. insumoB. cadena. sumar_el_atributo_cantidad_de_los_embarques_del_almacenB. atributo. enproceso. numero. 0. atributo. mercancias. numero. 0. atributo. clientes. numero. 0. fin. atributo. pasivo. objeto. fin. atributo. capital. objeto. atributo. capitalsocial. numero. 0. atributo. utilidades. numero. 0. fin. fin. atributo. almacenA. objeto.  atributo. maxA. numero. 5000.  atributo. totalA. cadena. sumatoria_de_cantidad.  atributo. unitarioA. cadena. sumatoria_de_precio_entre_sumatoria_de_cantidad.  atributo. inventario. arreglo.  valor. objeto. atributo. embarque. objeto. atributo. cantidad. numero. 209. atributo. precio. numero. 2159.52. fin. fin. valor. objeto. atributo. embarque. objeto. atributo. cantidad. numero. 263. atributo. precio. numero. 2070.24. fin. fin. valor. objeto. atributo. embarque. objeto. atributo. cantidad. numero. 236. atributo. precio. numero. 2069.19. fin. fin. fin. fin.  atributo. almacenB. objeto.  atributo. maxB. numero. 5000.  atributo. totalB. cadena. sumatoria_de_cantidad.  atributo. unitarioB. cadena. sumatoria_de_precio_entre_sumatoria_de_cantidad.  atributo. inventario. arreglo.  valor. objeto. atributo. embarque. objeto. atributo. cantidad. numero. 117. atributo. precio. numero. 2175.66. fin. fin. valor. objeto. atributo. embarque. objeto. atributo. cantidad. numero. 172. atributo. precio. numero. 2227.33. fin. fin. fin. fin. fin. fin. 
+        </textarea>
         <label for="resultSet">Resultado:</label>
         <textarea  cols="1000" id="resultSet" name="resultSet"  readonly> <?php 
         if(isset($inputs)){
